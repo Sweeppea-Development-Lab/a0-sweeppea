@@ -10,6 +10,14 @@ Sweeppea is a professional sweepstakes management platform for the United States
 
 This plugin automatically configures the **Sweeppea MCP server** (`https://mcp.sweeppea.com/`) in Agent Zero so you can manage sweepstakes through natural language conversations. Just enter your API token once and you're done.
 
+## Requirements
+
+This plugin requires an active **Sweeppea subscription**. Running sweepstakes in the US and Canada is legally complex — each state has its own registration requirements, bonding thresholds, eligibility rules, and prize disclosure laws. Sweeppea handles all of that: compliant official rules, multi-state eligibility, auditable winner draws, and more.
+
+Your API token isn't just authentication — it's your access to a platform built to keep promotions legally defensible.
+
+No account yet? [Start at sweeppea.com](https://www.sweeppea.com).
+
 ## Quick Setup
 
 1. Install the plugin from the Agent Zero plugin store
