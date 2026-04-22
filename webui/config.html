@@ -1,0 +1,155 @@
+<html>
+<head><title>Sweeppea Configuration</title></head>
+<body>
+<div x-data="{
+    showToken: false,
+    status: '',
+    statusMsg: '',
+    connecting: false,
+
+    async connectSweeppea() {
+        if (!config.sweeppea_api_token || !config.sweeppea_api_token.trim()) {
+            this.status = 'error';
+            this.statusMsg = 'API Token is required.';
+            return;
+        }
+        this.connecting = true;
+        this.status = '';
+        this.statusMsg = '';
+        try {
+            const apiFetch = globalThis.fetchApi || fetch;
+
+            /* 1. Save plugin config */
+            const saveRes = await apiFetch('/api/plugins', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'save_config',
+                    plugin_name: 'a0_sweeppea',
+                    project_name: '',
+                    agent_profile: '',
+                    settings: config
+                })
+            });
+            const saveData = await saveRes.json();
+            if (!saveData.ok) throw new Error('Failed to save plugin config.');
+
+            /* 2. Read current MCP settings */
+            const settingsRes = await apiFetch('/api/settings_get', { method: 'GET' });
+            const settingsData = await settingsRes.json();
+            let mcpData;
+            try { mcpData = JSON.parse(settingsData.mcp_servers || '{}'); }
+            catch { mcpData = {}; }
+            if (!mcpData.mcpServers) mcpData.mcpServers = {};
+
+            /* 3. Add / update Sweeppea entry */
+            mcpData.mcpServers.sweeppea = {
+                type: 'streamable-http',
+                url: 'https://mcp.sweeppea.com/',
+                headers: { Authorization: 'Bearer ' + config.sweeppea_api_token.trim() }
+            };
+
+            /* 4. Apply MCP config */
+            const mcpRes = await apiFetch('/api/mcp_servers_apply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mcp_servers: JSON.stringify(mcpData) })
+            });
+            const mcpResult = await mcpRes.json();
+
+            if (!mcpResult.success) throw new Error(mcpResult.error || 'MCP connection failed.');
+
+            /* 5. Check server status */
+            const srv = (mcpResult.status || []).find(s => s.name === 'sweeppea');
+            if (srv && srv.connected) {
+                this.status = 'ok';
+                this.statusMsg = 'Connected — ' + srv.tool_count + ' tools available.';
+            } else if (srv && srv.error) {
+                this.status = 'error';
+                this.statusMsg = srv.error || 'Connection failed. Check your API token.';
+            } else {
+                this.status = 'ok';
+                this.statusMsg = 'MCP server configured. Restart Agent Zero if tools are not visible.';
+            }
+        } catch (e) {
+            this.status = 'error';
+            this.statusMsg = e.message || 'Unexpected error.';
+        }
+        this.connecting = false;
+    }
+}">
+    <template x-if="config">
+        <div>
+            <div class="section-title">Sweeppea API Token</div>
+            <div class="section-description">
+                Enter your Sweeppea API token to connect Agent Zero to the Sweeppea MCP server.
+                You can find your token in your
+                <a href="https://www.sweeppea.com" target="_blank" style="color: #7c3aed;">Sweeppea account settings</a>.
+            </div>
+
+            <div class="field">
+                <div class="field-label">
+                    <div class="field-title">API Token</div>
+                    <div class="field-description">Your private Sweeppea Bearer token. Keep it secret.</div>
+                </div>
+                <div class="field-control">
+                    <div style="display: flex; gap: 6px; align-items: center;">
+                        <input
+                            :type="showToken ? 'text' : 'password'"
+                            x-model="config.sweeppea_api_token"
+                            placeholder="Enter your Sweeppea API token..."
+                            style="flex: 1; font-family: monospace; font-size: 12px;"
+                            autocomplete="off"
+                        />
+                        <button
+                            class="btn btn-field"
+                            @click="showToken = !showToken"
+                            style="white-space: nowrap; min-width: 56px;"
+                            x-text="showToken ? 'Hide' : 'Show'"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field" style="margin-top: 16px;">
+                <div class="field-label">
+                    <div class="field-title">Connection</div>
+                    <div class="field-description">Save your token and configure the Sweeppea MCP server in Agent Zero.</div>
+                </div>
+                <div class="field-control">
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <button
+                            class="btn"
+                            @click="connectSweeppea()"
+                            :disabled="connecting"
+                            style="background: #7c3aed; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; opacity: connecting ? 0.7 : 1;"
+                        >
+                            <span x-show="!connecting">Save &amp; Connect</span>
+                            <span x-show="connecting">Connecting...</span>
+                        </button>
+
+                        <span
+                            x-show="statusMsg"
+                            :style="'font-size: 12px; padding: 4px 10px; border-radius: 12px; font-weight: 500; background: ' + (status === 'ok' ? '#d1fae5' : '#fee2e2') + '; color: ' + (status === 'ok' ? '#065f46' : '#991b1b')"
+                            x-text="statusMsg"
+                        ></span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; padding: 12px 16px; background: rgba(124,58,237,0.07); border-radius: 8px; border: 1px solid rgba(124,58,237,0.15);">
+                <div style="font-size: 12px; font-weight: 600; color: #7c3aed; margin-bottom: 6px;">After connecting, you can ask Agent Zero to:</div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 12px; color: var(--text-secondary, #888); line-height: 1.8;">
+                    <li>Create and manage sweepstakes</li>
+                    <li>Add and track participants</li>
+                    <li>Draw winners fairly and transparently</li>
+                    <li>Set up official rules and compliance</li>
+                    <li>Schedule and manage drawings</li>
+                    <li>Handle support tickets and notes</li>
+                </ul>
+            </div>
+        </div>
+    </template>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+name: a0_sweeppea
+title: Sweeppea
+description: >
+  Official Sweeppea integration for Agent Zero. Enter your API token once and
+  instantly access 70+ sweepstakes management tools — create sweepstakes, manage
+  participants, draw winners, handle rules, billing, support tickets, and more.
+  No technical MCP setup required.
+version: 1.0.0
+settings_sections:
+  - sweeppea
+per_project_config: false
+per_agent_config: false
+always_enabled: false

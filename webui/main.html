@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweeppea</title>
+    <style>
+        :root {
+            --sp-purple: #7c3aed;
+            --sp-purple-light: rgba(124, 58, 237, 0.12);
+            --sp-purple-border: rgba(124, 58, 237, 0.22);
+            --bg: #0b0f17;
+            --panel: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: rgba(255, 255, 255, 0.92);
+            --muted: rgba(255, 255, 255, 0.55);
+        }
+
+        #sp-main {
+            margin: 0;
+            padding: 24px;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+            background:
+                radial-gradient(900px 500px at 10% 0%, rgba(124, 58, 237, 0.18), transparent 60%),
+                radial-gradient(700px 400px at 90% 80%, rgba(139, 92, 246, 0.12), transparent 55%),
+                var(--bg);
+            color: var(--text);
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 100vh;
+        }
+
+        #sp-main * { box-sizing: border-box; }
+
+        #sp-main .container { max-width: 960px; margin: 0 auto; }
+
+        #sp-main .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        #sp-main .logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        #sp-main .header-text h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        #sp-main .header-text p {
+            margin: 2px 0 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        #sp-main .badge {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--sp-purple-light);
+            color: #a78bfa;
+            border: 1px solid var(--sp-purple-border);
+        }
+
+        #sp-main .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        #sp-main .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+
+        #sp-main .card-icon { font-size: 20px; margin-bottom: 8px; }
+        #sp-main .card-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        #sp-main .card-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+        #sp-main .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin: 20px 0 10px;
+        }
+
+        #sp-main .tip-box {
+            background: var(--sp-purple-light);
+            border: 1px solid var(--sp-purple-border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 12px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.8);
+        }
+
+        #sp-main .tip-box strong { color: #c4b5fd; }
+
+        #sp-main .prompt-example {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 9px 13px;
+            font-size: 12px;
+            font-family: monospace;
+            color: #c4b5fd;
+            margin-bottom: 6px;
+        }
+
+        #sp-main .footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        #sp-main .footer a { color: #a78bfa; text-decoration: none; }
+        #sp-main .footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div id="sp-main">
+    <div class="container">
+
+        <div class="header">
+            <div class="logo">🎰</div>
+            <div class="header-text">
+                <h1>Sweeppea</h1>
+                <p>Sweepstakes management via MCP — 70+ tools, 15 categories</p>
+            </div>
+            <div class="badge">MCP</div>
+        </div>
+
+        <div class="section-label">Available Tool Categories</div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <div class="card-title">Sweepstakes</div>
+                <div class="card-desc">Create, edit, pause, clone, and delete sweepstakes campaigns.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Participants</div>
+                <div class="card-desc">Add, list, count, and remove participants from any sweepstakes.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏆</div>
+                <div class="card-title">Winners</div>
+                <div class="card-desc">Draw winners, schedule drawings, and fetch results.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <div class="card-title">Rules</div>
+                <div class="card-desc">Create official rules, run the rules wizard, manage compliance.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎨</div>
+                <div class="card-title">Entry Page</div>
+                <div class="card-desc">Configure 80+ entry page fields, styles, and settings.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <div class="card-title">Account</div>
+                <div class="card-desc">Fetch profile, business info, plan details, and health checks.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🗂️</div>
+                <div class="card-title">Groups</div>
+                <div class="card-desc">Organize sweepstakes into groups for easier management.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Calendar</div>
+                <div class="card-desc">Create and manage sweepstakes calendar events.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔒</div>
+                <div class="card-title">Notes</div>
+                <div class="card-desc">Encrypted private notes for sweepstakes (AES-256-CBC).</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">💳</div>
+                <div class="card-title">Billing</div>
+                <div class="card-desc">View billing history, wallet transactions, and data transfer.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎫</div>
+                <div class="card-title">Support Tickets</div>
+                <div class="card-desc">Create, update, and resolve support tickets.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📁</div>
+                <div class="card-title">Files</div>
+                <div class="card-desc">Upload, fetch, delete, and send files to participants.</div>
+            </div>
+        </div>
+
+        <div class="section-label">Example Prompts</div>
+
+        <div class="prompt-example">Create a sweepstakes for a $500 Amazon gift card, running for 30 days.</div>
+        <div class="prompt-example">Add john@example.com as a participant to my latest sweepstakes.</div>
+        <div class="prompt-example">Draw 3 winners from my "Summer Giveaway" sweepstakes.</div>
+        <div class="prompt-example">Generate official rules for my sweepstakes with prizes under $5,000.</div>
+        <div class="prompt-example">What's my current billing balance and plan details?</div>
+
+        <div class="section-label">Legal Note</div>
+        <div class="tip-box">
+            <strong>Sweeppea ensures US legal compliance.</strong> All sweepstakes include a free
+            alternative method of entry (AMOE) to avoid illegal lottery status. Prizes over $5,000
+            with participants in FL or NY require registration. Age Gate is required for alcohol &amp;
+            cannabis promotions (21+). Ask Agent Zero to check compliance before launching.
+        </div>
+
+        <div class="footer">
+            <a href="https://www.sweeppea.com" target="_blank">sweeppea.com</a>
+            <a href="https://mcpdocs.sweeppea.com" target="_blank">MCP Docs</a>
+            <a href="https://mcp.sweeppea.com" target="_blank">MCP Endpoint</a>
+            <span style="margin-left: auto;">v1.0.0 · 70 tools · 15 categories</span>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
